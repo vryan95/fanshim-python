@@ -1,4 +1,0 @@
-[run]
-source = fanshim
-omit =
-    .tox/*

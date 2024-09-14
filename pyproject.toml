@@ -117,7 +117,8 @@ apt_packages = [
     "python3-rpi.gpio",
 	"python3-setuptools",
 	"python3-dev",
-	"python3-psutil"
+	"python3-psutil",
+    "python3-spidev"
 ]
 configtxt = []
 commands = []
