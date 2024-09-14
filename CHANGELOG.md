@@ -3,4 +3,4 @@
 0.0.1
 -----
 
-* Initial Release
+* Initial Re-release of fanshim-python from pimoroni
