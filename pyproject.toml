@@ -10,11 +10,11 @@ license = {file = "LICENSE"}
 requires-python = ">= 3.7"
 authors = [
     { name = "Philip Howard", email = "phil@pimoroni.com" },
-    { name = "Ryan Verschuren, email= "" }
+    { name = "Ryan Verschuren", email = "ryan-verschuren@hotmail.com" }
 ]
 maintainers = [
     { name = "Philip Howard", email = "phil@pimoroni.com" },
-    { name = "Ryan Verschuren, email= "" }4
+    { name = "Ryan Verschuren", email = "ryan-verschuren@hotmail.com" }
 
 ]
 keywords = [
