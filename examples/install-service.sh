@@ -12,6 +12,7 @@ EXTCOLOURS=n
 EXTRA_ARGS=""
 USER_HOME=$(eval echo "~$SUDO_USER")
 VENV_DIR="$USER_HOME/.virtualenvs/pimoroni"
+PYTHON="$VENV_DIR/bin/python"
 
 SERVICE_PATH=/etc/systemd/system/pimoroni-fanshim.service
 
@@ -147,13 +148,6 @@ Brightness:       $BRIGHTNESS
 Extended Colours: $EXTCOLOURS
 EOF
 
-read -r -d '' START_FILE << EOF
-source $VENV_DIR/bin/activate
-python $(pwd)/automatic.py --on-threshold $ON_THRESHOLD --off-threshold $OFF_THRESHOLD --low-temp $LOW_TEMP --high-temp $HIGH_TEMP --delay $DELAY --brightness $BRIGHTNESS $EXTRA_ARGS
-EOF
-
-echo "$START_FILE" > $(pwd)/start-fanshim-service.sh
-
 read -r -d '' UNIT_FILE << EOF
 [Unit]
 Description=Fan Shim Service
@@ -162,7 +156,7 @@ After=multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=$(pwd)
-ExecStart=$(pwd)/start-fanshim-service.sh
+ExecStart=$PYTHON $(pwd)/automatic.py --on-threshold $ON_THRESHOLD --off-threshold $OFF_THRESHOLD --low-temp $LOW_TEMP --high-temp $HIGH_TEMP --delay $DELAY --brightness $BRIGHTNESS $EXTRA_ARGS
 Restart=on-failure
 
 [Install]
