@@ -8,10 +8,9 @@ APT_HAS_UPDATED=false
 RESOURCES_TOP_DIR="$HOME/Pimoroni"
 VENV_BASH_SNIPPET="$RESOURCES_TOP_DIR/auto_venv.sh"
 VENV_DIR="$HOME/.virtualenvs/pimoroni"
-USAGE="./install.sh (--unstable)"
+USAGE="./install.sh"
 POSITIONAL_ARGS=()
 FORCE=false
-UNSTABLE=false
 PYTHON="python"
 CMD_ERRORS=false
 
@@ -169,10 +168,6 @@ function pip_pkg_install {
 while [[ $# -gt 0 ]]; do
 	K="$1"
 	case $K in
-	-u|--unstable)
-		UNSTABLE=true
-		shift
-		;;
 	-f|--force)
 		FORCE=true
 		shift
@@ -270,15 +265,10 @@ apt_pkg_install "${APT_PACKAGES[@]}"
 
 printf "\n"
 
-if $UNSTABLE; then
-	warning "Installing unstable library from source.\n"
-	pip_pkg_install .
-else
-	inform "Installing stable library from pypi.\n"
-	pip_pkg_install "$LIBRARY_NAME"
-fi
 
-# shellcheck disable=SC2181 # One of two commands run, depending on --unstable flag
+printf "Installing library from source.\n"
+pip_pkg_install .
+
 if [ $? -eq 0 ]; then
 	success "Done!\n"
 	echo "$PYTHON -m pip uninstall $LIBRARY_NAME" >> "$UNINSTALLER"

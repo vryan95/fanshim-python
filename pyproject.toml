@@ -38,7 +38,7 @@ classifiers = [
     "Topic :: System :: Hardware",
 ]
 dependencies = [
-    "apa102"
+    "apa102 >= 0.0.3"
 ]
 
 [project.urls]
