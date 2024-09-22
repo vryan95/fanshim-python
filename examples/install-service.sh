@@ -10,7 +10,7 @@ NOLED=n
 NOBUTTON=n
 EXTCOLOURS=n
 EXTRA_ARGS=""
-VENV_DIR="~$USER/.virtualenvs/pimoroni"
+VENV_DIR="~$SUDO_USER/.virtualenvs/pimoroni"
 
 SERVICE_PATH=/etc/systemd/system/pimoroni-fanshim.service
 
