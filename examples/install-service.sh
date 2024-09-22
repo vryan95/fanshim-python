@@ -10,20 +10,13 @@ NOLED=n
 NOBUTTON=n
 EXTCOLOURS=n
 EXTRA_ARGS=""
+VENV_DIR="$HOME/.virtualenvs/pimoroni"
 
 SERVICE_PATH=/etc/systemd/system/pimoroni-fanshim.service
 
 vars=$(getopt -o f:o:d:r:G:R:plbxh --long off-threshold:,on-threshold:,delay:,brightness:,low-temp:,high-temp:,preempt,noled,nobutton,extended-colours,help -- "$@")
 
 USAGE="./install-service.sh --off-threshold <n> --on-threshold <n> --delay <n> --brightness <n> --low-temp <n> --high-temp <n> --venv <python_virtual_environment> (--preempt) (--noled) (--nobutton) (--extended-colours)"
-
-venv_check() {
-	PYTHON_BIN=$(which $PYTHON)
-	if [[ $VIRTUAL_ENV == "" ]] || [[ $PYTHON_BIN != $VIRTUAL_ENV* ]]; then
-		printf "This script should be run in a virtual Python environment.\n"
-		exit 1
-	fi
-}
 
 usage() {
 >&2 cat << EOF
@@ -135,8 +128,6 @@ set_arguments() {
     fi
 }
 
-#venv_check
-
 get_options
 set_arguments
 
@@ -155,6 +146,13 @@ Brightness:       $BRIGHTNESS
 Extended Colours: $EXTCOLOURS
 EOF
 
+read -r -d '' START_FILE << EOF
+source $VENV_DIR/bin/activate
+python $(pwd)/automatic.py --on-threshold $ON_THRESHOLD --off-threshold $OFF_THRESHOLD --low-temp $LOW_TEMP --high-temp $HIGH_TEMP --delay $DELAY --brightness $BRIGHTNESS $EXTRA_ARGS
+EOF
+
+echo "$START_FILE" > $(pwd)/start-fanshim-service.sh
+
 read -r -d '' UNIT_FILE << EOF
 [Unit]
 Description=Fan Shim Service
@@ -163,7 +161,7 @@ After=multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=$(pwd)
-ExecStart=source $VIRTUAL_ENV/bin/activate;$PYTHON $(pwd)/automatic.py --on-threshold $ON_THRESHOLD --off-threshold $OFF_THRESHOLD --low-temp $LOW_TEMP --high-temp $HIGH_TEMP --delay $DELAY --brightness $BRIGHTNESS $EXTRA_ARGS
+ExecStart=$(pwd)/start-fanshim-service.sh
 Restart=on-failure
 
 [Install]
